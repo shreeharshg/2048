@@ -7,7 +7,7 @@ export default class Tile {
     constructor (tileContainer, value = Math.random() > 0.5 ? 2 : 4) {
         this.#tileElement = document.createElement("div");
         this.#tileElement.classList.add("tile");
-        tileContainer.appendChild(this.#tileElement);
+        tileContainer.append(this.#tileElement);
         this.value = value;
     }
 
@@ -20,6 +20,9 @@ export default class Tile {
         this.#tileElement.style.setProperty('--text-lightness', `${backgroundLightness <= 50 ? 90 : 10}%`);
     }
 
+    get value(){
+        return this.#value;
+    }
 
     set x(value){
         this.#x = value;
@@ -31,4 +34,19 @@ export default class Tile {
         this.#tileElement.style.setProperty('--y', value);
     }
 
+    remove(){
+        this.#tileElement.remove();
+    }
+
+    waitForTransition(animation = false) {
+        return new Promise(resolve => {
+          this.#tileElement.addEventListener(
+            animation ? "animationend" : "transitionend",
+            resolve,
+            {
+              once: true,
+            }
+          )
+        })
+      }
 }
